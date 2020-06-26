@@ -1,0 +1,56 @@
+* {
+    margin:0px;
+}
+
+body {
+    background-color: #FFFFFF;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: small;
+    color: #000000;
+}
+
+#dropbox {
+    width:70%;
+    height:50px;
+    margin:auto;
+    border:2px dashed #ccc;
+    color: #ccc;
+    line-height: 50px;
+    text-align: center;
+}
+
+#dropbox.active {
+    border-color:#000;
+    color:#000;
+    cursor: pointer;
+}
+
+#upload {
+	width: 0;
+	height: 0;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+
+.my-container {
+    padding-top: 15px;
+    width:80%;
+    margin:auto;
+    text-align: center;
+}
+
+.progress-trough {
+    border: 1px solid #000000;
+    height: 24px;
+    width: 100%;
+    position: relative;
+}
+
+.progress-bar {
+    width: 50%;
+    height: 100%;
+    background-color: #0099FF;
+}

@@ -87,3 +87,7 @@ a.article-title:hover {
   vertical-align: middle;
   display: inline-flex;
 }
+
+.cls {
+  float: none;
+}

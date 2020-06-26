@@ -1,0 +1,41 @@
+body {
+    background-color: #FFFFFF;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: small;
+    color: #000000;
+}
+
+#dropbox {
+    border: 2px dashed #000000;
+    padding: 20px;
+}
+
+#dropbox.active {
+    border: 4px dashed #FF0000;
+}
+
+#dropbox.dropped {
+    border: 4px dashed yellow;
+}
+
+#upload {
+	width: 0;
+	height: 0;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.progress-trough {
+    border: 1px solid #000000;
+    height: 24px;
+    width: 100%;
+    position: relative;
+}
+
+.progress-bar {
+    width: 50%;
+    height: 100%;
+    background-color: #0099FF;
+}

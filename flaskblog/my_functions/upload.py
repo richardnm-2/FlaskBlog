@@ -3,6 +3,7 @@ from flaskblog import sess_uuid
 from flask import request
 import os
 import secrets
+from PIL import Image
 from pathlib import Path
 import shutil
 import json
@@ -73,7 +74,12 @@ def upload(form):
         destination = "/".join([target, filename])
         print("Accept incoming file:", filename)
         print("Save it to:", destination)
-        upload.save(destination)
+
+        output_size = (125,125)
+        i = Image.open(upload)
+        i.thumbnail(output_size)
+        i.save(destination)
+        # upload.save(destination)
     
     return destination
 

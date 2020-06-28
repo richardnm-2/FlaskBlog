@@ -91,7 +91,7 @@ def transfer_picture_to_main_folder(old_picture):
     path = str(Path(picture_path).parent)
     print(str(Path(picture_path).parent) + os.sep + picture_name)
     dest = str(Path(str(Path(str(Path(picture_path).parent)).parent)).parent) + os.sep + picture_name
-
+    
     shutil.move(picture_path, dest)
     
     try:

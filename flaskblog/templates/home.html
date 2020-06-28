@@ -1,14 +1,20 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    {% for post in posts %}
+    {% for post in posts|reverse %}
         <article class="media content-section">
+            <img class="rounded-circle article-img" src=" {{ url_for('static', filename='profile_pics/' + post.author.image_file) }} " alt="">
             <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="#">{{ post.author }}</a>
-                <small class="text-muted">{{ post.date_posted }}</small>
+                <a class="mr-2" href="#">{{ post.author.username }}</a>
+                {% if post.date_posted != post.date_edited %}
+                    <small class="text-muted">{{ post.date_posted.replace(tzinfo=tz).astimezone(tz=None).strftime('%Y-%m-%d @ %H:%M') }} </small> <br>
+                    <small class="text-muted">Edited {{ post.date_edited.replace(tzinfo=tz).astimezone(tz=None).strftime('%Y-%m-%d @ %H:%M') }} </small>
+                {% else %}
+                    <small class="text-muted">{{ post.date_posted.replace(tzinfo=tz).astimezone(tz=None).strftime('%Y-%m-%d @ %H:%M') }} </small>
+                {% endif %}
             </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+            <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
             <p class="article-content">{{ post.content }}</p>
             </div>
         </article>

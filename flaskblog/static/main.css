@@ -84,10 +84,30 @@ a.article-title:hover {
   /* width: 50%; */
   /* border: 3px solid green; */
   /* padding: 0px 0px 0px 0px; */
+  margin: auto;
   vertical-align: middle;
   display: inline-flex;
 }
 
+.small-icon {
+  /* text-align: center;
+  padding-top: 2px;
+  margin-bottom: 0px; */
+  /* float: right; */
+  font-size: 18px;
+}
+
+.nav-icon {
+  /* float: right; */
+  /* display: inline-block; */
+  /* text-align: center; */
+  padding-top: 5px;
+  color: #cbd5db;
+}
+
+.nav-icon:hover {
+  color: #ffffff;
+}
 .cls {
   float: none;
 }

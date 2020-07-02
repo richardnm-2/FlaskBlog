@@ -30,7 +30,7 @@ class Post(db.Model):
     post_history = db.relationship('PostHistory', backref='post', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.title}', '{self.date_posted}')"
+        return f"Post('{self.title}', '{self.date_posted}')"
 
 class PostHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)

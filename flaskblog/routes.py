@@ -4,7 +4,7 @@ from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, Post
 from flaskblog.models import User, Post, PostHistory, DeletedPost, DeletedPostHistory
 from flask_login import login_user, logout_user, current_user, login_required
 from flaskblog.my_functions.upload import upload, transfer_picture_to_main_folder
-from flaskblog.my_functions.delete import delete_move_post
+from flaskblog.my_functions.delete import delete_move_post, create_mass
 from uuid import uuid4
 from datetime import datetime, timezone
 
@@ -14,9 +14,11 @@ db.create_all()
 @app.route('/')
 @app.route('/home')
 def home():
-    posts = Post.query.order_by(Post.date_edited).all()
-    for post in posts:
-        print(post.content + str(post.date_edited))
+    page = request.args.get('page', 1, type=int)
+    # posts = Post.query.order_by(Post.date_edited).all()
+    posts = Post.query.order_by(Post.date_edited.desc()).paginate(page=page, per_page=5)
+    # for post in posts.items:
+    #     print(post.content + str(post.date_edited))
     posts_history = PostHistory.query.all()
     tz = timezone.utc
     return render_template('home.html', posts=posts, tz=tz, title='TESTE')
@@ -150,3 +152,21 @@ def delete_post(post_id):
    
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('home'))
+
+@app.route("/post/create", methods=['GET','POST'])
+@login_required
+def create_json():
+    create_mass()
+    return redirect(url_for('home'))
+
+@app.route('/user/<string:username>')
+def user_posts(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    
+    posts = Post.query.filter_by(author=user)\
+        .order_by(Post.date_edited.desc())\
+        .paginate(page=page, per_page=5)
+
+    tz = timezone.utc
+    return render_template('user_posts.html', posts=posts, user=user, tz=tz)

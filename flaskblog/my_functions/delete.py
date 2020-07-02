@@ -1,6 +1,7 @@
 from flaskblog import db
 from flaskblog.models import User, Post, PostHistory, DeletedPost, DeletedPostHistory
 from datetime import datetime
+import json
 
 def delete_move_post(post):
     post_history = PostHistory.query.filter_by(post_id=post.id).all()  
@@ -30,3 +31,17 @@ def delete_move_post(post):
         db.session.delete(posth)
 
     db.session.commit()
+
+def create_mass():
+
+    with open('flaskblog\my_functions\posts.json') as f:
+        posts = json.load(f)
+    # posts = 
+
+    # posts = json.loads(posts)
+    # for pst in posts:
+    #     print(str(pst["title"]) + " " + str(pst["content"]) + " " + str(pst["user_id"]))
+    #     post = Post()
+    #     post = Post(title=pst['title'], content=pst['content'], user_id=int(pst['user_id']))
+    #     db.session.add(post)
+    #     db.session.commit()

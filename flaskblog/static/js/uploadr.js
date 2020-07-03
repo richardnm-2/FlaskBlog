@@ -129,6 +129,7 @@ function doUpload() {
         cache: false,
         data: fd,
         success: function(data) {
+            // location.reload(forceGet=true)
             var $dropbox = $("#dropbox");
             console.log('Entrou')
             console.log(fd.get("file").name)
@@ -136,16 +137,23 @@ function doUpload() {
             document.getElementById("file-upload-success").removeAttribute("hidden");
             // $success_span();
             // $success_span.hidden = false;
+            
             $dropbox.removeClass("active");
             $dropbox.removeClass("dropped");
             $dropbox.text("Drag and Drop Files Here");
+            
             // fd=null;
             // $("#upload").trigger("reset");
             PENDING_FILES  = [];
             // document.getElementById("upload").reset();
             var uuid = data.msg;
+            
         },
-    });
+    }).done(function(data){                 // ; Return JSON da função, e recebe o JSON na variavel data. altera atributo usando a KEY
+        console.log(data)
+        $('#account-picture').attr('src', data['src']);
+    });  
+
 }
 
 function collectFormData() {

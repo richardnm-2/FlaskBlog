@@ -44,8 +44,8 @@ def upload(form):
     print("")
     # target = os.path.normpath(os.path.join(dirname, r"static\profile_pics\temp\{}".
                         #   format(sess_uuid)))
-    target = os.path.join(dirname, r"static\profile_pics\temp\{}".format(sess_uuid))
-    tgt = os.path.normpath(os.path.join(dirname, r"static\profile_pics\temp"))
+    target = os.path.join(dirname, r"static/profile_pics/temp/{}".format(sess_uuid))
+    tgt = os.path.normpath(os.path.join(dirname, r"static/profile_pics/temp"))
     print(tgt)
     if not os.path.exists(target):
         try:
@@ -90,7 +90,7 @@ def upload(form):
 
 def transfer_picture_to_main_folder(old_picture):
     dirname = os.path.dirname(flaskblog.__file__)
-    sess_uuid_path = os.path.join(dirname, r"static\profile_pics\temp\{}".
+    sess_uuid_path = os.path.join(dirname, r"static/profile_pics/temp/{}".
                                   format(sess_uuid))
     picture_path = os.path.join(os.sep, sess_uuid_path,
                                 os.listdir(sess_uuid_path)[0])
@@ -102,6 +102,7 @@ def transfer_picture_to_main_folder(old_picture):
 
     shutil.move(picture_path, dest)
     try:
+        print(sess_uuid_path)
         os.rmdir(sess_uuid_path)
         picture_upload = True
     except OSError as e:
@@ -110,7 +111,11 @@ def transfer_picture_to_main_folder(old_picture):
 
     # print(os.path.join(os.sep, dirname, "static/profile_pics/", old_picture))
     try:
-        os.remove(os.path.join(os.sep, dirname, "static/profile_pics/",
+        rm_dir = os.path.join(dirname, r"static/profile_pics",
+                              old_picture)
+        print(rm_dir)
+
+        os.remove(os.path.join(dirname, r"static/profile_pics",
                                old_picture))
     except Exception:
         return picture_name, picture_upload

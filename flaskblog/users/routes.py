@@ -77,7 +77,7 @@ def account():
             if picture_upload:
                 flash('Something went wrong, please try again.', 'danger')
                 current_user.image_file = "default.jpeg"
-            return redirect(url_for('users.account'))
+            # return redirect(url_for('users.account'))
 
         db.session.commit()
         flash('Your account has been updated!', 'success')

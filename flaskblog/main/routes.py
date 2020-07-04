@@ -1,18 +1,8 @@
-from flaskblog import db
-from flask import render_template, redirect, url_for,  request, Blueprint
+from flask import render_template, request, Blueprint
 from flaskblog.models import Post  # , PostHistory
 from datetime import timezone
 
 main = Blueprint('main', __name__)
-
-
-db.create_all()
-
-
-@main.route('/favicon.ico')
-def favicon():
-    # bg_scheduler(clearfolder, 'profile_pics/temp')
-    return redirect(url_for('static', filename='favicon.ico'))
 
 
 @main.route('/')

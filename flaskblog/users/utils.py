@@ -1,9 +1,8 @@
 import os
 import secrets
 from PIL import Image
-from flask import url_for, request
+from flask import url_for, request, current_app
 from flask_mail import Message
-
 import flaskblog
 from flaskblog import sess_uuid, mail
 from pathlib import Path
@@ -12,30 +11,6 @@ import shutil
 # import glob
 # from uuid import uuid4
 # from functions import functions as fn
-
-
-# from apscheduler.schedulers.background import BackgroundScheduler
-# from apscheduler.triggers.interval import IntervalTrigger
-# import atexit
-# import time
-
-# def print_time(msg):
-#     print(msg)
-#     print (time.strftime('%H:%M:%S'))
-
-
-# scheduler = BackgroundScheduler()
-# scheduler.start()
-# scheduler.add_job(
-#     func=lambda: clearfolder(url_for('static', filename='profile_pics/temp')),
-#     # func=lambda: print_time('a'),
-#     trigger=IntervalTrigger(seconds=2),
-#     id='printing_time_job',
-#     name='Print time every 2 seconds',
-#     replace_existing=True)
-# # Shut down the scheduler when exiting the app
-# atexit.register(lambda: scheduler.shutdown())
-
 
 
 def clearfolder(folder_path):
@@ -53,16 +28,12 @@ def clearfolder(folder_path):
 
 def upload(form):
     form = request.form
-
-    # upload_key = str(uuid4())
-    # Is the upload using Ajax, or a direct POST by the form?
     is_ajax = False
     if form.get("__ajax", None) == "true":
         is_ajax = True
 
-    # Target folder for these uploads.
-    # target = "/static/profile_pics/temp{}".format(upload_key)
     target = ""
+    dirname = os.path.dirname(current_app.root_path)
     dirname = os.path.dirname(flaskblog.__file__)
     print("")
     print("")
@@ -71,18 +42,19 @@ def upload(form):
     print("")
     print("")
     print("")
-    target = os.path.join(dirname, r"static\profile_pics\temp\{}".
-                          format(sess_uuid))
-
+    # target = os.path.normpath(os.path.join(dirname, r"static\profile_pics\temp\{}".
+                        #   format(sess_uuid)))
+    target = os.path.join(dirname, r"static\profile_pics\temp\{}".format(sess_uuid))
+    tgt = os.path.normpath(os.path.join(dirname, r"static\profile_pics\temp"))
+    print(tgt)
     if not os.path.exists(target):
         try:
+            print(target)
             os.mkdir(target)
-        except Exception:
-            pass
+        except Exception as inst:
+            print(inst)
             if is_ajax:
                 print('Error creating folder')
-                # return ajax_response(False, '''Couldn't create upload
-                #  directory:
                 return "Couldn't create upload directory: {}".format(target)
 
             else:
@@ -113,8 +85,6 @@ def upload(form):
         # upload.save(destination)
         rel_path = "profile_pics/temp/{}".\
             format(sess_uuid) + "/" + filename
-    # return destination
-
     return rel_path, filename
 
 

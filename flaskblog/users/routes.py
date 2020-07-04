@@ -1,6 +1,7 @@
-from flask import render_template, url_for, flash, redirect, request, jsonify, Blueprint
+from flask import (render_template, url_for, flash, redirect,
+                   request, jsonify, Blueprint)
 from flask_login import login_user, current_user, logout_user, login_required
-from flaskblog import db, bcrypt, sess_uuid
+from flaskblog import db, bcrypt
 from flaskblog.models import User, Post
 from flaskblog.users.forms import (RegistrationForm, LoginForm,
                                    UpdateAccountForm, RequestResetForm,
@@ -96,10 +97,9 @@ def account():
         # return redirect(url_for('users.account', file=filename))
 
     image_file = url_for('static', filename='profile_pics/'
-                            + current_user.image_file)
+                         + current_user.image_file)
     return render_template('account.html', title='Account',
-                            image_file=image_file, form=form)
-        
+                           image_file=image_file, form=form)
 
 
 @users.route('/user/<string:username>')

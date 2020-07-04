@@ -33,7 +33,7 @@ def bg_scheduler(function, args):
     scheduler.add_job(
         func=lambda: function(clear_path),
         # func=lambda: print_time('a'),
-        trigger=IntervalTrigger(seconds=2),
+        trigger=IntervalTrigger(hours=24),
         id='printing_time_job',
         name='Print time every 2 seconds',
         replace_existing=True)

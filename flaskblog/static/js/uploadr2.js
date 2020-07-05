@@ -74,7 +74,7 @@ function readURL(input) {
     } else {
       removeUpload();
     }
-  }
+}
   
   function removeUpload() {
     $('.file-upload-input').replaceWith($('.file-upload-input').clone());
@@ -97,62 +97,100 @@ function doUpload() {
         // e.preventDefault();
         // $(this).removeClass("active");
     // });
+    console.log("Itens")
+    console.log(PENDING_FILES.length)
+    if(! (PENDING_FILES.length == 0 )){
+        $("#progress").show();
+        var $progressBar   = $("#progress-bar");
 
-    $("#progress").show();
-    var $progressBar   = $("#progress-bar");
+        // Gray out the form.
+        // $("#upload-form :input").attr("disabled", "disabled");
 
-    // Gray out the form.
-    // $("#upload-form :input").attr("disabled", "disabled");
+        // Initialize the progress bar.
+        // $progressBar.css({"width": "0%"});
 
-    // Initialize the progress bar.
-    // $progressBar.css({"width": "0%"});
+        // Collect the form data.
+        fd = collectFormData();
 
-    // Collect the form data.
-    fd = collectFormData();
+        // Attach the files.
+        for (var i = 0, ie = PENDING_FILES.length; i < ie; i++) {
+            // Collect the other form data.
+            fd.append("file", PENDING_FILES[i]);
+        }
 
-    // Attach the files.
-    for (var i = 0, ie = PENDING_FILES.length; i < ie; i++) {
-        // Collect the other form data.
-        fd.append("file", PENDING_FILES[i]);
+        // Inform the back-end that we're doing this over ajax.
+        fd.append("__ajax", "true");
+        
+        console.log("Nome do arquivo")
+        // if (! (PENDING_FILES[0].name.includes('.png', '.jpg', '.jpeg'))){
+        // alert("File format not allowed")
+        // // throw new Error("")
+        // files = []
+        // }
+
+    } 
+    var filename = PENDING_FILES[0].name;
+    var file_extensions = ['.png', '.jpg', '.jpeg'];
+    if (file_extensions.some(el => filename.includes(el))){
+        $.ajax({
+
+            // url: UPLOAD_URL,
+            url: UPLOAD_URL,
+            method: "POST",
+            contentType: false,
+            processData: false,
+            cache: false,
+            data: fd,
+            xhr: function() {
+                
+                const progressBarFill = document.querySelector('#progressBar > .progress-bar-fill');
+                const progressBarText = document.querySelector('.progress-bar-text');
+
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        console.log(percentComplete);
+                        var percent = (Math.round(percentComplete * 100))
+                        // document.getElementById("upld").textContent='Uploading -> ' + percent
+                        progressBarFill.style.width = percent + '%'
+                        progressBarText.textContent = percent + '%'
+                        document.getElementById("upld").removeAttribute("hidden");
+        
+                        // $('#status').html('<b> Uploading -> ' + (Math.round(percentComplete * 100)) + '% </b>');
+                    }
+                }, false);
+                return xhr;
+            },
+            success: function(data) {
+                // location.reload(forceGet=true)
+                var $dropbox = $("#dropbox");
+                console.log('Entrou')
+                console.log(fd.get("file").name)
+                document.getElementById("file-upload-success").textContent=fd.get("file").name + " uploaded";
+                document.getElementById("file-upload-success").removeAttribute("hidden");
+                // $success_span();
+                // $success_span.hidden = false;
+                
+                $dropbox.removeClass("active");
+                $dropbox.removeClass("dropped");
+                $dropbox.text("Drag and Drop Files Here");
+                
+                // fd=null;
+                // $("#upload").trigger("reset");
+                PENDING_FILES  = [];
+                // document.getElementById("upload").reset();
+                var uuid = data.msg;
+                
+            },
+        }).done(function(data){                 // ; Return JSON da função, e recebe o JSON na variavel data. altera atributo usando a KEY
+            console.log(data)
+            $('#account-picture').attr('src', data['src']);
+        }); 
+    
+    } else {
+        alert("File extension not allowed")
     }
-
-    // Inform the back-end that we're doing this over ajax.
-    fd.append("__ajax", "true");
-
-    var xhr = $.ajax({
-
-        // url: UPLOAD_URL,
-        url: UPLOAD_URL,
-        method: "POST",
-        contentType: false,
-        processData: false,
-        cache: false,
-        data: fd,
-        success: function(data) {
-            // location.reload(forceGet=true)
-            var $dropbox = $("#dropbox");
-            console.log('Entrou')
-            console.log(fd.get("file").name)
-            document.getElementById("file-upload-success").textContent=fd.get("file").name + " uploaded";
-            document.getElementById("file-upload-success").removeAttribute("hidden");
-            // $success_span();
-            // $success_span.hidden = false;
-            
-            $dropbox.removeClass("active");
-            $dropbox.removeClass("dropped");
-            $dropbox.text("Drag and Drop Files Here");
-            
-            // fd=null;
-            // $("#upload").trigger("reset");
-            PENDING_FILES  = [];
-            // document.getElementById("upload").reset();
-            var uuid = data.msg;
-            
-        },
-    }).done(function(data){                 // ; Return JSON da função, e recebe o JSON na variavel data. altera atributo usando a KEY
-        console.log(data)
-        $('#account-picture').attr('src', data['src']);
-    });  
 
 }
 
@@ -196,7 +234,12 @@ function handleFiles(files) {
     if (files.length > 1) {
         alert("Only the first selected file will be uploaded")
     }
+    
     PENDING_FILES.push(files[0]);
+
+    // if ($.inArray(files[0]).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+    //     alert("File format not allowed")
+    // }
     // }
 }
 
@@ -218,6 +261,7 @@ function initDropbox() {
         e.preventDefault();
         $dropbox.text("Click to upload a new picture");
         $(this).addClass("active");
+        // alert("")
     });
 
     // On mouse out...

@@ -9,7 +9,7 @@
                 <p class="text-secondary">{{ current_user.email }}</p>
             </div>
         </div>
-            <form method="POST" action="" enctype="multipart/form-data" novalidate>
+            <form id="uploadForm" method="POST" action="" enctype="multipart/form-data" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Account Info</legend>
@@ -60,8 +60,16 @@
                         Drag and Drop Files Here
                     </div>
         
-                <!--        <input type="submit" value="Upload!" id="upload-button">-->
-                <span id="file-upload-success" hidden>File Uploaded</span>
+                    <!--        <input type="submit" value="Upload!" id="upload-button">-->
+                    <span id="file-upload-success" hidden>File Uploaded</span>
+                    <!-- <span id="upld" hidden></span> -->
+
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-bar-fill">
+                            <span id="upld" class="progress-bar-text">0%</span>
+                        </div>
+                    </div>
+                    
                 </div>
             </fieldset>
             <div class="form-group">

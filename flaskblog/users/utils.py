@@ -74,7 +74,8 @@ def upload(form):
         _, f_ext = os.path.splitext(filename)
         filename = random_hex + f_ext
 
-        destination = "/".join([target, filename])
+        destination = os.path.normpath(os.path.join(target,
+                                       filename))
         print("Accept incoming file:", filename)
         print("Save it to:", destination)
 
@@ -90,8 +91,8 @@ def upload(form):
 
 def transfer_picture_to_main_folder(old_picture):
     dirname = os.path.dirname(flaskblog.__file__)
-    sess_uuid_path = os.path.join(dirname, r"static/profile_pics/temp/{}".
-                                  format(sess_uuid))
+    sess_uuid_path = os.path.normpath(os.path.join(dirname, r"static/profile_pics/temp/{}".
+                                  format(sess_uuid)))
     picture_path = os.path.join(os.sep, sess_uuid_path,
                                 os.listdir(sess_uuid_path)[0])
     picture_name = os.path.basename(picture_path)
@@ -110,15 +111,17 @@ def transfer_picture_to_main_folder(old_picture):
         print("Error: %s : %s" % (sess_uuid_path, e.strerror))
 
     # print(os.path.join(os.sep, dirname, "static/profile_pics/", old_picture))
-    try:
-        rm_dir = os.path.join(dirname, r"static/profile_pics",
-                              old_picture)
-        print(rm_dir)
+    print(os.path.normpath(old_picture))
+    if not old_picture == 'default.jpeg':
+        try:
+            rm_dir = os.path.normpath(os.path.join(dirname, 
+                                                   r'''static/
+profile_pics''', old_picture))
+            print(rm_dir)
 
-        os.remove(os.path.join(dirname, r"static/profile_pics",
-                               old_picture))
-    except Exception:
-        return picture_name, picture_upload
+            os.remove(rm_dir)
+        except Exception:
+            return picture_name, picture_upload
     return picture_name, picture_upload
 
 

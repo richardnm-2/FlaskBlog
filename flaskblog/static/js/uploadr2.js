@@ -153,6 +153,7 @@ function doUpload() {
                         console.log(percentComplete);
                         var percent = (Math.round(percentComplete * 100))
                         // document.getElementById("upld").textContent='Uploading -> ' + percent
+                        document.getElementById("progressBar").removeAttribute("hidden");
                         progressBarFill.style.width = percent + '%'
                         progressBarText.textContent = percent + '%'
                         document.getElementById("upld").removeAttribute("hidden");
